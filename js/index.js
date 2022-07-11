@@ -61,6 +61,14 @@ const solveMaze = async () => {
     case 'dfs':
       await dfs();
       break;
+
+    case 'astar':
+      await Astar();
+      break;
+
+    case 'uniformCost':
+      await uniformCostSearch();
+      break;
   }
   solving = false;
 }

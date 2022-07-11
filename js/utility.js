@@ -50,7 +50,6 @@ const clearMaze = (lvl = 0) => {
   }
 }
 
-
 // Animate 
 const animate = async () => {
   state[endPoints[0][0]][endPoints[0][1]] = startNode;
@@ -99,18 +98,6 @@ const animate = async () => {
 const actions = () => {
   return (generating || moving>=0 || solving);
 }
-
-// Adding and Removing Start
-// const addStartEnd = () => {
-//   let start = document.getElementById(`${endPoints[0][0]},${endPoints[0][1]}`);
-//   state[endPoints[0][0]][endPoints[0][1]] = startNode;
-//   start.className = 'node endpoint';
-//   start.innerHTML = startImg;
-//   let end = document.getElementById(`${endPoints[1][0]},${endPoints[1][1]}`);
-//   state[endPoints[1][0]][endPoints[1][1]] = endNode;
-//   end.className = 'node endpoint';
-//   end.innerHTML = endImg;
-// }
 
 // Tracing Final Path
 const traceFinal = async (parent) => {

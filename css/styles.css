@@ -49,6 +49,10 @@ select {
   border-radius: 6px;
 }
 
+option {
+  text-align: center;
+}
+
 #start_button {
   display: flex;
   justify-content: flex-end;
