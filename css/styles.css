@@ -120,14 +120,17 @@ option {
 
 .wall {
   background-color: rgba(0, 0, 0, 0.95);
+  animation: generateNode 1s;
 }
 
-.in-queue {
+/* .in-queue {
   background-color: yellow;
-}
+  animation: generateNode 0.5s;
+} */
 
 .visited {
   background-color: green;
+  animation: generateNode 1s;
 }
 
 .icon {
@@ -136,6 +139,7 @@ option {
   font-size: 1.3rem;
   text-align: center;
   color: blue;
+  animation: generateNode 1s;
 }
 
 .up {
@@ -150,3 +154,12 @@ option {
   transform: rotate(180deg);
 }
 
+@keyframes generateNode {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

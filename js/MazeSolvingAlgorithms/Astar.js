@@ -10,12 +10,11 @@ const Astar = async () => {
     let [h, g, x, y] = queue[j];
     queue.splice(j, 1);
     if(x === endPoints[1][0] && y === endPoints[1][1]) {
-      await animate();
       await traceFinal(parent);
       return;
     }
     state[x][y] = visited;
-    await animate();
+    await animate(x,y);
     for(let i=0; i<dx.length; i++) {
       let nx = x + dx[i], ny = y + dy[i];
       if(checkIn(nx, ny) && (state[nx][ny] < wall || state[nx][ny] === inQueue)) {
@@ -33,6 +32,7 @@ const Astar = async () => {
           parent[`${nx},${ny}`] = [x,y,i];
           queue.push([hofx(nx,ny)+g+1, g+1, nx, ny]);
           state[nx][ny] = inQueue;
+          await animate(nx, ny);
         }
       }
     }

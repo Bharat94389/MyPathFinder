@@ -1,6 +1,6 @@
 // ----------------------------- Initial Setup -----------------------------
 
-let columns, rows, delay = 20;
+let columns, rows;
 let state, direction;
 
 let container = document.getElementById('container');
@@ -36,9 +36,9 @@ const define = async () => {
   endPoints[1] = [Math.floor(rows/2), Math.floor(columns*3/4)];
   state[endPoints[0][0]][endPoints[0][1]] = startNode;
   state[endPoints[1][0]][endPoints[1][1]] = endNode;
-  animate();
+  await animateWhole();
 }
-let mousedown = false;
+
 const init = async () => {
   await define();
   addListeners();
@@ -105,7 +105,7 @@ document.getElementById('clearMaze').addEventListener('click', () => {
 const addListeners = () => {
   let nodes = document.getElementsByClassName('node');
   for(let i=0; i<nodes.length; i++) {
-    nodes[i].addEventListener('mousedown', (event) => {
+    nodes[i].addEventListener('mousedown', async (event) => {
       event.preventDefault();
       if(event.button === 0 && actions() === false) {
         try {
@@ -113,7 +113,7 @@ const addListeners = () => {
           id = [parseInt(id[0]), parseInt(id[1])];
           if(state[id[0]][id[1]] >= 0) {
             state[id[0]][id[1]] = (state[id[0]][id[1]]==1?0:1);
-            animate();
+            await animate(id[0], id[1]);
           }
           else {
             if(endPoints[1][0]===id[0] && endPoints[1][1]===id[1]) moving = 1;
@@ -124,7 +124,7 @@ const addListeners = () => {
         catch(err) {}
       }
     })
-    nodes[i].addEventListener('mouseover', (event) => {
+    nodes[i].addEventListener('mouseover', async (event) => {
       event.preventDefault();
       if(mousedown) { 
         let id = nodes[i].id.split(',');
@@ -133,17 +133,18 @@ const addListeners = () => {
           try {
             if(state[id[0]][id[1]] >= 0) {
               state[id[0]][id[1]] = (state[id[0]][id[1]]==1?0:1);
-              animate();
+              animate(id[0], id[1]);
             }
           }
           catch(err) {}
         }
         if(moving>=0 && state[id[0]][id[1]] !== 1 && state[id[0]][id[1]]>=0) {
-          let temp = state[endPoints[moving][0]][endPoints[moving][1]];
           state[endPoints[moving][0]][endPoints[moving][1]] = 0;
-          state[id[0]][id[1]] = temp;
+          state[id[0]][id[1]] = (moving === 1? endNode : startNode);
+          let temp = endPoints[moving];
           endPoints[moving] = id;
-          animate();
+          await animate(temp[0], temp[1]);
+          await animate(id[0], id[1]);
         }
       }
     });

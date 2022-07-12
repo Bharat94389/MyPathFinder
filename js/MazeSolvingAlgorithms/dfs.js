@@ -5,12 +5,11 @@ const dfs = async () => {
     let [x, y] = queue[queue.length - 1];
     queue.pop();
     if(x === endPoints[1][0] && y === endPoints[1][1]) {
-      await animate();
       await traceFinal(parent);
       return;
     }
     state[x][y] = visited;
-    await animate();
+    await animate(x, y);
     for(let i=0; i<dx.length; i++) {
       let nx = x + dx[i], ny = y + dy[i];
       if(checkIn(nx, ny) && (state[nx][ny] < wall || state[nx][ny] === inQueue)) {
@@ -25,6 +24,7 @@ const dfs = async () => {
         parent[`${nx},${ny}`] = [x,y,i];
         state[nx][ny] = inQueue;
         queue.push([nx, ny]);
+        await animate(nx, ny);
       }
     }
   }

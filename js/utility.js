@@ -1,6 +1,6 @@
 // Constants
 const dx = [0, -1, 0, 1], dy = [-1, 0, 1, 0];
-const nodeWidth = 30, nodeHeight = 30;
+const nodeWidth = 30, nodeHeight = 30, delay = 15;
 
 // States of node
 const emptyNode = 0, wall = 1, startNode = -1, endNode = -2;
@@ -18,6 +18,7 @@ const finalPathIcon = [
 
 // Action variables
 let generating = false, moving = -1, solving = false;
+let mousedown = false;
 let endPoints = [];
 
 // Sleep function
@@ -46,51 +47,64 @@ const clearMaze = (lvl = 0) => {
           state[i][j] = 0;
       }
     }
-    animate();
+    animateWhole();
+  }
+}
+
+// Setting styles
+const setStyle = async (i, j) => {
+  let temp = document.getElementById(`${i},${j}`);
+  temp.innerHTML = '';
+  switch(state[i][j]) {
+    case wall:
+      temp.className = 'node wall';
+      break;
+
+    case startNode:
+      temp.innerHTML = startIcon;
+      temp.className = 'node icon';
+      break;
+
+    case endNode:
+      temp.innerHTML = endIcon;
+      temp.className = 'node icon';
+      break;
+
+    // case inQueue:
+    //   temp.className = 'node in-queue';
+    //   break;
+
+    case visited:
+      temp.className = 'node visited';
+      break;
+
+    case final:
+      temp.innerHTML = finalPathIcon[direction[i][j]];
+      temp.className = 'node icon';
+      break;
+
+    default:
+      temp.className = 'node';
   }
 }
 
 // Animate 
-const animate = async () => {
+const animateWhole = async () => {
   state[endPoints[0][0]][endPoints[0][1]] = startNode;
   state[endPoints[1][0]][endPoints[1][1]] = endNode;
   for(let i=0; i<rows; i++) {
     for(let j=0; j<columns; j++) {
-      let temp = document.getElementById(`${i},${j}`);
-      temp.innerHTML = '';
-      switch(state[i][j]) {
-        case wall:
-          temp.className = 'node wall';
-          break;
-
-        case startNode:
-          temp.innerHTML = startIcon;
-          temp.className = 'node icon';
-          break;
-
-        case endNode:
-          temp.innerHTML = endIcon;
-          temp.className = 'node icon';
-          break;
-
-        case inQueue:
-          temp.className = 'node in-queue';
-          break;
-
-        case visited:
-          temp.className = 'node visited';
-          break;
-
-        case final:
-          temp.innerHTML = finalPathIcon[direction[i][j]];
-          temp.className = 'node icon';
-          break;
-
-        default:
-          temp.className = 'node';
-      }
+      if(state[i][j] !== wall)
+        await setStyle(i, j);
     }
   }
+  await sleep();
+}
+
+const animate = async (i, j) => {
+  state[endPoints[0][0]][endPoints[0][1]] = startNode;
+  state[endPoints[1][0]][endPoints[1][1]] = endNode;
+  await setStyle(i,j);
   await sleep();
 }
 
@@ -111,7 +125,7 @@ const traceFinal = async (parent) => {
   for(let i=finalPath.length - 1; i>=0; i--) {
     [x,y] = finalPath[i];
     state[x][y] = final;
-    await animate();
+    await animate(x,y);
   }
 }
 
