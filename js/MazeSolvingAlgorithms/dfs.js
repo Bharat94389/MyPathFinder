@@ -9,7 +9,6 @@ const dfs = async () => {
       await traceFinal(parent);
       return;
     }
-    console.log(x,y);
     state[x][y] = visited;
     await animate();
     for(let i=0; i<dx.length; i++) {

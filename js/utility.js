@@ -114,3 +114,8 @@ const traceFinal = async (parent) => {
     await animate();
   }
 }
+
+// Heuristic Function
+const hofx = (x, y) => {
+  return Math.abs(x - endPoints[1][0]) + Math.abs(y - endPoints[1][1]);
+}

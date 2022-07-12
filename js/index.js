@@ -52,7 +52,6 @@ const solveMaze = async () => {
   clearMaze(1);
   solving = true;
   let algo = document.getElementById('mazeSolvingAlgorithm');
-  console.log(algo.value);
   switch(algo.value) {
     case 'bfs':
       await bfs();
@@ -68,6 +67,10 @@ const solveMaze = async () => {
 
     case 'uniformCost':
       await uniformCostSearch();
+      break;
+
+    case 'bestFirst':
+      await greedyBestFirstSearch();
       break;
   }
   solving = false;
